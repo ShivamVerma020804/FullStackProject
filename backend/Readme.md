@@ -1,1 +1,1 @@
-# This is a full stack project , that involves authentication , and much more complexties
+# This is a full stack project , that involves authentication , and much more complexities
