@@ -1,11 +1,98 @@
 
 
-    // export const User = mongoose.model("User", userSchema);
-    import mongoose, { Schema } from "mongoose";
-    import jwt from "jsonwebtoken";
-    import bcrypt from "bcrypt";
+    // // export const User = mongoose.model("User", userSchema);
+    // import mongoose, { Schema } from "mongoose";
+    // import jwt from "jsonwebtoken";
+    // import bcrypt from "bcrypt";
 
-    const userSchema = new Schema({
+    // const userSchema = new Schema({
+    //     username: {
+    //         type: String,
+    //         required: true,
+    //         unique: true,
+    //         lowercase: true,
+    //         trim: true,
+    //         index: true
+    //     },
+    //     email: {
+    //         type: String,
+    //         required: true,
+    //         unique: true,
+    //         lowercase: true,
+    //         trim: true
+    //     },
+    //     fullName: {
+    //         type: String,
+    //         required: true,
+    //         index: true,
+    //         lowercase: true,
+    //         trim: true,
+    //     },
+    //     avatar: {
+    //         type: String,
+    //         required: true,
+    //     },
+    //     coverImage: {
+    //         type: String,
+    //     },
+    //     watchHistory: [
+    //         {
+    //             type: Schema.Types.ObjectId,
+    //             ref: "Video"
+    //         }
+    //     ],
+    //     password: {
+    //         type: String,
+    //         required: [true, 'Password is required']
+    //     },
+    //     refreshToken: {
+    //         type: String
+    //     }
+    // }, { timestamps: true })
+
+    // // Bug 1 fixed — removed next from async hook
+    // userSchema.pre("save", async function () {
+    //     if (!this.isModified("password")) return;
+    //     this.password = await bcrypt.hash(this.password, 10);
+    // });
+
+    // // Bug 2 fixed — added return
+    // userSchema.methods.isPasswordCorrect = async function (password) {
+    //     return await bcrypt.compare(password, this.password);
+    // }
+
+    // userSchema.methods.generateAccessToken = function () {
+    //     return jwt.sign({
+    //         _id: this._id,
+    //         email: this.email,
+    //         username: this.username,
+    //         fullName: this.fullName
+    //     },
+    //         process.env.ACCESS_TOKEN_SECRET,
+    //         { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
+    //     );
+    // }
+
+    // // Bug 3 fixed — using REFRESH_TOKEN_SECRET and REFRESH_TOKEN_EXPIRY
+    // userSchema.methods.generateRefreshToken = function () {
+    //     return jwt.sign({
+    //         _id: this._id
+    //     },
+    //         process.env.REFRESH_TOKEN_SECRET,
+    //         { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
+    //     );
+    // }
+
+    // console.log("USER MODEL VERSION NEW");
+
+    // export const User = mongoose.model("User", userSchema);
+
+    import mongoose, { Schema } from "mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+
+const userSchema = new Schema(
+    {
         username: {
             type: String,
             required: true,
@@ -25,15 +112,14 @@
             type: String,
             required: true,
             index: true,
-            lowercase: true,
-            trim: true,
+            trim: true
         },
         avatar: {
             type: String,
-            required: true,
+            required: true
         },
         coverImage: {
-            type: String,
+            type: String
         },
         watchHistory: [
             {
@@ -43,46 +129,50 @@
         ],
         password: {
             type: String,
-            required: [true, 'Password is required']
+            required: true
         },
         refreshToken: {
             type: String
         }
-    }, { timestamps: true })
+    },
+    { timestamps: true }
+);
 
-    // Bug 1 fixed — removed next from async hook
-    userSchema.pre("save", async function () {
-        if (!this.isModified("password")) return;
-        this.password = await bcrypt.hash(this.password, 10);
-    });
+// TEMPORARILY KEEP THIS COMMENTED
+// userSchema.pre("save", async function () {
+//     if (!this.isModified("password")) return;
+//     this.password = await bcrypt.hash(this.password, 10);
+// });
 
-    // Bug 2 fixed — added return
-    userSchema.methods.isPasswordCorrect = async function (password) {
-        return await bcrypt.compare(password, this.password);
-    }
+userSchema.methods.isPasswordCorrect = async function (password) {
+    return bcrypt.compare(password, this.password);
+};
 
-    userSchema.methods.generateAccessToken = function () {
-        return jwt.sign({
+userSchema.methods.generateAccessToken = function () {
+    return jwt.sign(
+        {
             _id: this._id,
             email: this.email,
             username: this.username,
             fullName: this.fullName
         },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
-        );
-    }
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRY
+        }
+    );
+};
 
-    // Bug 3 fixed — using REFRESH_TOKEN_SECRET and REFRESH_TOKEN_EXPIRY
-    userSchema.methods.generateRefreshToken = function () {
-        return jwt.sign({
+userSchema.methods.generateRefreshToken = function () {
+    return jwt.sign(
+        {
             _id: this._id
         },
-            process.env.REFRESH_TOKEN_SECRET,
-            { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
-        );
-    }
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY
+        }
+    );
+};
 
-    console.log("USER MODEL VERSION NEW");
-
-    export const User = mongoose.model("User", userSchema);
+export const User = mongoose.model("User", userSchema);
