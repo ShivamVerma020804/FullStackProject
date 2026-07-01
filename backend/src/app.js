@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });  // ← add this at very top
+console.log("CORS_ORIGIN =", process.env.CORS_ORIGIN);
 
 import express from "express";
 import cors from "cors";
