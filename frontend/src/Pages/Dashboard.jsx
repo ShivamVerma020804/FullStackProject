@@ -72,26 +72,30 @@ function Dashboard() {
 
         {/* Stats */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-          <DashboardCard
-            title="Videos"
-            value={videos.length}
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-8">
+<DashboardCard
+  icon="🎬"
+  title="Videos"
+  value={videos.length}
+/>
 
-          <DashboardCard
-            title="Subscribers"
-            value="0"
-          />
+<DashboardCard
+  icon="👥"
+  title="Subscribers"
+  value="0"
+/>
 
-          <DashboardCard
-            title="Views"
-            value={totalViews}
-          />
+<DashboardCard
+  icon="👁️"
+  title="Views"
+  value={totalViews}
+/>
 
-          <DashboardCard
-            title="Playlists"
-            value="0"
-          />
+<DashboardCard
+  icon="🌎"
+  title="Published"
+  value={videos.filter(video => video.isPublished).length}
+/>
         </div>
 
         {/* Uploads */}

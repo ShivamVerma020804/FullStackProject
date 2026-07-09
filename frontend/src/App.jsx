@@ -7,7 +7,7 @@ import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import Profile from "./Pages/Profile";
 import Upload from "./Pages/Upload";
-import Playlists from "./Pages/Playlists";
+
 import NotFound from "./Pages/NotFound";
 
 import ProtectedRoute from "./components/ProtectedRoutes";
@@ -61,14 +61,14 @@ function App() {
                 />
 
                 {/* Playlists */}
-                <Route
+                {/* <Route
                     path="/playlists"
                     element={
                         <ProtectedRoute>
                             <Playlists />
                         </ProtectedRoute>
                     }
-                />
+                /> */}
 
                 {/* Watch Video (Coming Next) */}
               <Route

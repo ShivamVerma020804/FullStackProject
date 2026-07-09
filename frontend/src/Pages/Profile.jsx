@@ -212,10 +212,15 @@ useEffect(() => {
 </p>
             </div>
 
-            <div className="bg-white border rounded-xl shadow-sm p-6 text-center hover:shadow-md transition">
-              <h2 className="text-3xl font-bold">0</h2>
-              <p className="text-gray-500">Playlists</p>
-            </div>
+           <div className="bg-white border rounded-xl shadow-sm p-6 text-center hover:shadow-md transition">
+  <h2 className="text-3xl font-bold">
+    {videos.filter(video => video.isPublished).length}
+  </h2>
+
+  <p className="text-gray-500">
+    Published
+  </p>
+</div>
 
           </div>
 

@@ -109,7 +109,7 @@ function Upload() {
             onChange={(e) =>
               setTitle(e.target.value)
             }
-            className="w-full border rounded-xl p-4"
+            className="w-full border border-gray-300 rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-red-500"
           />
 
           <textarea
@@ -119,56 +119,107 @@ function Upload() {
             onChange={(e) =>
               setDescription(e.target.value)
             }
-            className="w-full border rounded-xl p-4"
+            className="w-full border border-gray-300 rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-red-500"
           />
 
-          <div>
+<div>
 
-            <label className="font-semibold">
-              Select Thumbnail
-            </label>
+  <label className="block font-semibold mb-3">
+    Thumbnail
+  </label>
 
-            <input
-              type="file"
-              accept="image/*"
-              className="mt-2"
-              onChange={handleThumbnail}
-            />
+  <label className="flex items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer hover:border-red-500 hover:bg-red-50 transition">
 
-            {thumbnailPreview && (
-              <img
-                src={thumbnailPreview}
-                alt="Preview"
-                className="mt-4 h-48 rounded-xl border"
-              />
-            )}
+    <div className="text-center">
 
-          </div>
+      <div className="text-5xl mb-2">
+        🖼️
+      </div>
 
-          <div>
+      <p className="font-semibold">
+        Choose Thumbnail
+      </p>
 
-            <label className="font-semibold">
-              Select Video
-            </label>
+      <p className="text-sm text-gray-500 mt-1">
+        JPG, PNG or WEBP
+      </p>
 
-            <input
-              type="file"
-              accept="video/*"
-              className="mt-2"
-              onChange={handleVideo}
-            />
+    </div>
 
-            {videoFile && (
-              <p className="mt-3 text-green-600">
-                ✅ {videoFile.name}
-              </p>
-            )}
+    <input
+      hidden
+      type="file"
+      accept="image/*"
+      onChange={handleThumbnail}
+    />
 
-          </div>
+  </label>
+
+  {thumbnail && (
+
+    <p className="mt-4 text-green-600 font-medium">
+      ✅ {thumbnail.name}
+    </p>
+
+  )}
+
+  {thumbnailPreview && (
+
+    <img
+      src={thumbnailPreview}
+      alt="Preview"
+      className="mt-5 w-full max-h-72 object-cover rounded-xl shadow"
+    />
+
+  )}
+
+</div>
+<div>
+
+  <label className="block font-semibold mb-3">
+    Video File
+  </label>
+
+  <label className="flex items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer hover:border-red-500 hover:bg-red-50 transition">
+
+    <div className="text-center">
+
+      <div className="text-5xl mb-2">
+        🎥
+      </div>
+
+      <p className="font-semibold">
+        Choose Video
+      </p>
+
+      <p className="text-sm text-gray-500 mt-1">
+        MP4, MOV, AVI
+      </p>
+
+    </div>
+
+    <input
+      hidden
+      type="file"
+      accept="video/*"
+      onChange={handleVideo}
+    />
+
+  </label>
+
+  {videoFile && (
+
+    <p className="mt-4 text-green-600 font-medium break-all">
+      ✅ {videoFile.name}
+    </p>
+
+  )}
+
+</div>
 
           <button
             disabled={loading}
-            className="w-full bg-red-500 hover:bg-red-600 text-white rounded-xl p-4 text-lg font-semibold transition"
+            className="w-full bg-red-500 hover:bg-red-600 hover:scale-[1.01] text-white rounded-2xl py-4 text-lg font-semibold transition-all duration-300 disabled:opacity-60"
           >
             {loading
               ? "Uploading..."

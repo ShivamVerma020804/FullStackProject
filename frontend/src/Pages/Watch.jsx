@@ -5,136 +5,127 @@ import MainLayout from "../layouts/MainLayout";
 import { getVideoById } from "../services/videoService";
 
 function Watch() {
-    const { videoId } = useParams();
+  const { videoId } = useParams();
 
-    const [video, setVideo] = useState(null);
-    const [loading, setLoading] = useState(true);
+  const [video, setVideo] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchVideo();
-    }, [videoId]);
+  useEffect(() => {
+    fetchVideo();
+  }, [videoId]);
 
-    const fetchVideo = async () => {
-        try {
-            const response = await getVideoById(videoId);
-            setVideo(response.data);
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    if (loading) {
-        return (
-            <MainLayout>
-                <div className="text-center mt-20 text-xl">
-                    Loading...
-                </div>
-            </MainLayout>
-        );
+  const fetchVideo = async () => {
+    try {
+      const response = await getVideoById(videoId);
+      setVideo(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    if (!video) {
-        return (
-            <MainLayout>
-                <div className="text-center mt-20 text-xl">
-                    Video not found.
-                </div>
-            </MainLayout>
-        );
-    }
-
+  if (loading) {
     return (
-        <MainLayout>
-            <div className="max-w-6xl mx-auto">
+      <MainLayout>
+        <div className="flex justify-center items-center py-32">
+          <p className="text-slate-500 text-lg">
+            Loading video...
+          </p>
+        </div>
+      </MainLayout>
+    );
+  }
 
-                {/* Video Player */}
+  if (!video) {
+    return (
+      <MainLayout>
+        <div className="flex justify-center items-center py-32">
+          <p className="text-slate-500 text-lg">
+            Video not found.
+          </p>
+        </div>
+      </MainLayout>
+    );
+  }
 
-                <div className="bg-black rounded-xl overflow-hidden flex justify-center items-center">
+  return (
+    <MainLayout>
 
-                    <video
-                        controls
-                        className="w-full max-h-[75vh] object-contain"
-                        src={video.videoFile}
-                    />
+      <div className="max-w-6xl mx-auto">
 
-                </div>
+        {/* Video */}
 
-                {/* Title */}
+        <div className="rounded-2xl overflow-hidden shadow-lg bg-black">
 
-                <h1 className="text-3xl font-bold mt-6">
-                    {video.title}
-                </h1>
+          <video
+            controls
+            className="w-full max-h-[75vh]"
+            src={video.videoFile}
+          />
 
-                {/* Owner */}
+        </div>
 
-                <div className="flex justify-between items-center mt-6 flex-wrap gap-4">
+        {/* Video Info */}
 
-                    <div className="flex items-center gap-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mt-8">
 
-                        <img
-                            src={video.owner.avatar}
-                            alt={video.owner.username}
-                            className="w-14 h-14 rounded-full object-cover"
-                        />
+          <h1 className="text-3xl font-bold text-slate-800">
+            {video.title}
+          </h1>
 
-                        <div>
+          <div className="flex items-center justify-between mt-5 flex-wrap gap-4">
 
-                            <h2 className="font-semibold text-lg">
-                                {video.owner.fullName}
-                            </h2>
+            <div className="flex items-center gap-4">
 
-                            <p className="text-gray-500">
-                                @{video.owner.username}
-                            </p>
+              <img
+                src={video.owner.avatar}
+                alt={video.owner.username}
+                className="w-14 h-14 rounded-full object-cover border-2 border-violet-200"
+              />
 
-                        </div>
+              <div>
 
-                    </div>
+                <h2 className="font-semibold text-lg">
+                  {video.owner.fullName}
+                </h2>
 
-                    {/* Temporary Subscribe Button */}
+                <p className="text-slate-500">
+                  @{video.owner.username}
+                </p>
 
-                    <button className="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition">
-                        Subscribe
-                    </button>
-
-                </div>
-
-                {/* Stats */}
-
-                <div className="flex items-center gap-6 mt-6 text-gray-600">
-
-                    <span>
-                        👁 {video.views} views
-                    </span>
-
-                    <span>
-                        📅{" "}
-                        {new Date(
-                            video.createdAt
-                        ).toLocaleDateString()}
-                    </span>
-
-                </div>
-
-                {/* Description */}
-
-                <div className="bg-gray-100 rounded-xl p-5 mt-6">
-
-                    <h3 className="font-semibold mb-2">
-                        Description
-                    </h3>
-
-                    <p className="text-gray-700 whitespace-pre-wrap">
-                        {video.description}
-                    </p>
-
-                </div>
+              </div>
 
             </div>
-        </MainLayout>
-    );
+
+            <div className="bg-violet-100 text-violet-700 px-5 py-2 rounded-full font-semibold">
+
+              👁 {video.views} Views
+
+            </div>
+
+          </div>
+
+          <div className="mt-8">
+
+            <h3 className="font-semibold text-slate-700 mb-3">
+              Description
+            </h3>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 text-slate-600 leading-7">
+
+              {video.description}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </MainLayout>
+  );
 }
 
 export default Watch;

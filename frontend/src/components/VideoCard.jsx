@@ -4,11 +4,11 @@ const VideoCard = ({ video, compact = false }) => {
   return (
     <Link
       to={`/watch/${video._id}`}
-      className="block group"
+      className="block group hover:-translate-y-1 transition-all duration-300"
     >
       {/* Thumbnail */}
 
-      <div className="overflow-hidden rounded-xl">
+      <div className="overflow-hidden rounded-2xl shadow-sm group-hover:shadow-xl transition-all duration-300">
 
         <img
           src={video.thumbnail}
@@ -34,7 +34,7 @@ const VideoCard = ({ video, compact = false }) => {
 
         <div className="flex-1">
 
-          <h3 className="font-semibold text-base line-clamp-2">
+          <h3 className="font-bold text-lg line-clamp-2 group-hover:text-red-600 transition-colors">
             {video.title}
           </h3>
 

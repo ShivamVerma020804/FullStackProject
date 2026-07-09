@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff, ImagePlus } from "lucide-react";
+
 import { registerUser } from "../services/userService";
 
 function Signup() {
@@ -44,13 +46,8 @@ function Signup() {
       data.append("email", formData.email);
       data.append("password", formData.password);
 
-      if (avatar) {
-        data.append("avatar", avatar);
-      }
-
-      if (coverImage) {
-        data.append("coverImage", coverImage);
-      }
+      if (avatar) data.append("avatar", avatar);
+      if (coverImage) data.append("coverImage", coverImage);
 
       await registerUser(data);
 
@@ -61,7 +58,8 @@ function Signup() {
       console.log(err);
 
       setError(
-        err.response?.data?.message || "Registration failed."
+        err.response?.data?.message ||
+          "Registration failed."
       );
     } finally {
       setLoading(false);
@@ -69,21 +67,28 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center py-10 px-4">
-      <div className="bg-white shadow-2xl rounded-2xl w-full max-w-2xl p-8">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center py-10 px-4">
 
-        {/* Header */}
+      <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-slate-200 p-8">
+
+        {/* Logo */}
 
         <div className="text-center mb-8">
 
-          <h1 className="text-5xl">🎥</h1>
+          <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-violet-600 to-fuchsia-500 flex items-center justify-center shadow-lg">
 
-          <h2 className="text-3xl font-bold text-red-600 mt-2">
+            <span className="text-4xl text-white">
+              ▶
+            </span>
+
+          </div>
+
+          <h1 className="mt-5 text-4xl font-black bg-gradient-to-r from-violet-600 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent">
             NovaTube
-          </h2>
+          </h1>
 
-          <p className="text-gray-500 mt-2">
-            Create your account
+          <p className="text-slate-500 mt-3 text-lg">
+            Create your account and start sharing videos.
           </p>
 
         </div>
@@ -91,45 +96,52 @@ function Signup() {
         {/* Error */}
 
         {error && (
-          <div className="bg-red-100 border border-red-300 text-red-600 p-3 rounded-lg mb-5 text-center">
+          <div className="mb-6 bg-red-50 border border-red-200 text-red-600 rounded-xl p-3 text-center">
             {error}
           </div>
         )}
 
         {/* Form */}
 
-        <form onSubmit={handleSignup} className="space-y-5">
+        <form
+          onSubmit={handleSignup}
+          className="space-y-6"
+        >
 
           <div className="grid md:grid-cols-2 gap-5">
 
             <div>
+
               <label className="block mb-2 font-medium">
                 Full Name
               </label>
 
               <input
                 name="fullName"
-                placeholder="Enter Full Name"
+                placeholder="John Doe"
                 value={formData.fullName}
                 onChange={handleChange}
-                className="w-full border rounded-lg p-3 outline-none focus:ring-2 focus:ring-red-500"
                 required
+                className="w-full border border-slate-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
               />
+
             </div>
 
             <div>
+
               <label className="block mb-2 font-medium">
                 Username
               </label>
 
               <input
                 name="username"
-                placeholder="Enter Username"
+                placeholder="@johndoe"
                 value={formData.username}
                 onChange={handleChange}
-                className="w-full border rounded-lg p-3 outline-none focus:ring-2 focus:ring-red-500"
                 required
+                className="w-full border border-slate-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
               />
+
             </div>
 
           </div>
@@ -143,11 +155,11 @@ function Signup() {
             <input
               type="email"
               name="email"
-              placeholder="Enter Email"
+              placeholder="example@email.com"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border rounded-lg p-3 outline-none focus:ring-2 focus:ring-red-500"
               required
+              className="w-full border border-slate-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
             />
 
           </div>
@@ -166,16 +178,22 @@ function Signup() {
                 placeholder="Enter Password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full border rounded-lg p-3 pr-12 outline-none focus:ring-2 focus:ring-red-500"
                 required
+                className="w-full border border-slate-300 rounded-xl p-3 pr-12 focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
               />
 
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3"
+                onClick={() =>
+                  setShowPassword(!showPassword)
+                }
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-violet-600"
               >
-                {showPassword ? "🙈" : "👁️"}
+                {showPassword ? (
+                  <EyeOff size={20} />
+                ) : (
+                  <Eye size={20} />
+                )}
               </button>
 
             </div>
@@ -186,31 +204,46 @@ function Signup() {
 
           <div>
 
-            <label className="block mb-2 font-medium">
-              Avatar <span className="text-red-500">*</span>
+            <label className="block mb-3 font-medium">
+              Avatar *
             </label>
 
-            <input
-              type="file"
-              accept="image/*"
-              required
-              onChange={(e) => {
-                const file = e.target.files[0];
+            <label className="flex flex-col items-center justify-center h-40 border-2 border-dashed border-slate-300 rounded-2xl cursor-pointer hover:border-violet-500 hover:bg-violet-50 transition">
 
-                setAvatar(file);
+              <ImagePlus size={42} className="text-violet-600" />
 
-                if (file) {
-                  setAvatarPreview(URL.createObjectURL(file));
-                }
-              }}
-            />
+              <p className="mt-3 font-semibold">
+                Choose Avatar
+              </p>
+
+              <input
+                hidden
+                type="file"
+                accept="image/*"
+                required
+                onChange={(e) => {
+                  const file = e.target.files[0];
+
+                  setAvatar(file);
+
+                  if (file) {
+                    setAvatarPreview(
+                      URL.createObjectURL(file)
+                    );
+                  }
+                }}
+              />
+
+            </label>
 
             {avatarPreview && (
+
               <img
                 src={avatarPreview}
-                alt="Avatar Preview"
-                className="w-24 h-24 rounded-full mt-4 object-cover border-2 border-gray-300 shadow"
+                alt="Avatar"
+                className="w-24 h-24 rounded-full object-cover mt-5 border-4 border-violet-200 shadow"
               />
+
             )}
 
           </div>
@@ -219,30 +252,45 @@ function Signup() {
 
           <div>
 
-            <label className="block mb-2 font-medium">
+            <label className="block mb-3 font-medium">
               Cover Image
             </label>
 
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files[0];
+            <label className="flex flex-col items-center justify-center h-40 border-2 border-dashed border-slate-300 rounded-2xl cursor-pointer hover:border-violet-500 hover:bg-violet-50 transition">
 
-                setCoverImage(file);
+              <ImagePlus size={42} className="text-violet-600" />
 
-                if (file) {
-                  setCoverPreview(URL.createObjectURL(file));
-                }
-              }}
-            />
+              <p className="mt-3 font-semibold">
+                Choose Cover Image
+              </p>
+
+              <input
+                hidden
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+
+                  setCoverImage(file);
+
+                  if (file) {
+                    setCoverPreview(
+                      URL.createObjectURL(file)
+                    );
+                  }
+                }}
+              />
+
+            </label>
 
             {coverPreview && (
+
               <img
                 src={coverPreview}
-                alt="Cover Preview"
-                className="w-full h-48 object-cover rounded-xl mt-4 border shadow"
+                alt="Cover"
+                className="w-full h-52 rounded-2xl object-cover mt-5 shadow border border-slate-200"
               />
+
             )}
 
           </div>
@@ -250,24 +298,34 @@ function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-red-500 hover:bg-red-600 transition-all duration-300 hover:scale-[1.02] disabled:bg-gray-400 text-white p-3 rounded-lg font-semibold"
+            className="w-full bg-violet-600 hover:bg-violet-700 hover:scale-[1.02] disabled:opacity-60 text-white py-3 rounded-xl font-semibold transition-all duration-300"
           >
-            {loading ? "Creating Account..." : "Create Account"}
+            {loading
+              ? "Creating Account..."
+              : "Create Account"}
           </button>
 
         </form>
 
-        <p className="text-center mt-6 text-gray-500">
-          Already have an account?{" "}
-          <Link
-            to="/login"
-            className="text-red-500 font-semibold hover:underline"
-          >
-            Login
-          </Link>
-        </p>
+        <div className="text-center mt-8">
+
+          <p className="text-slate-500">
+
+            Already have an account?{" "}
+
+            <Link
+              to="/login"
+              className="text-violet-600 font-semibold hover:text-violet-700"
+            >
+              Login
+            </Link>
+
+          </p>
+
+        </div>
 
       </div>
+
     </div>
   );
 }

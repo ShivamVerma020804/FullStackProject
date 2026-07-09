@@ -1,3 +1,11 @@
+import {
+  House,
+  LayoutDashboard,
+  User,
+  Upload,
+  LogOut,
+} from "lucide-react";
+
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -9,27 +17,22 @@ function Sidebar() {
     {
       name: "Home",
       path: "/",
-      icon: "🏠",
+      icon: <House size={20} />,
     },
     {
       name: "Dashboard",
       path: "/dashboard",
-      icon: "📊",
+      icon: <LayoutDashboard size={20} />,
     },
     {
       name: "Profile",
       path: "/profile",
-      icon: "👤",
+      icon: <User size={20} />,
     },
     {
       name: "Upload",
       path: "/upload",
-      icon: "📹",
-    },
-    {
-      name: "Playlists",
-      path: "/playlists",
-      icon: "📂",
+      icon: <Upload size={20} />,
     },
   ];
 
@@ -39,7 +42,7 @@ function Sidebar() {
   };
 
   return (
-    <aside className="w-64 min-h-screen bg-white border-r p-5 flex flex-col">
+    <aside className="hidden lg:flex w-64 min-h-screen bg-slate-50 border-r border-slate-200 flex-col p-5">
 
       <div className="space-y-2">
 
@@ -48,15 +51,18 @@ function Sidebar() {
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center gap-3 p-3 rounded-lg transition ${
+              `flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${
                 isActive
-                  ? "bg-red-100 text-red-600 font-semibold"
-                  : "hover:bg-gray-100"
+                  ? "bg-violet-100 text-violet-700 shadow-sm"
+                  : "text-slate-700 hover:bg-violet-50 hover:text-violet-700"
               }`
             }
           >
-            <span>{item.icon}</span>
-            {item.name}
+            {item.icon}
+
+            <span className="font-medium">
+              {item.name}
+            </span>
           </NavLink>
         ))}
 
@@ -64,8 +70,9 @@ function Sidebar() {
 
       <button
         onClick={handleLogout}
-        className="mt-auto bg-red-500 hover:bg-red-600 text-white rounded-lg p-3"
+        className="mt-auto flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white rounded-2xl py-3 font-semibold transition-all duration-300 hover:shadow-lg"
       >
+        <LogOut size={18} />
         Logout
       </button>
 
