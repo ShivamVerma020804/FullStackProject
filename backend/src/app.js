@@ -19,7 +19,11 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 import userRouter from "./routes/user.routes.js";
+// import videoRouter from "./routes/video.routes.js";
 import videoRouter from "./routes/video.routes.js";
+
+console.log(import.meta.url);
+console.log(videoRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/videos", videoRouter);
 console.log("✅ userRouter mounted at /api/v1/users");

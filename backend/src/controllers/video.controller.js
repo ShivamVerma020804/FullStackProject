@@ -100,11 +100,9 @@ const getAllVideos = asynchandler(async (req, res) => {
 
 
 
-    const matchStage = {
-
-        isPublished: true
-
-    };
+ const matchStage = {
+    owner: req.user?._id
+};
 
 
 
@@ -240,6 +238,7 @@ const getAllVideos = asynchandler(async (req, res) => {
 
 });
 const getVideoById = asynchandler(async (req, res) => {
+    console.log("VIDEO ROUTE HIT", req.params.videoId);
 
     const { videoId } = req.params;
 
@@ -433,21 +432,140 @@ const togglePublishStatus = asynchandler(async (req, res) => {
     );
 
 });
+const getFeedVideos = asynchandler(async (req, res) => {
+    console.log("FEED ROUTE HIT");
+    const videos = await Video.aggregate([
+        {
+            $match: {
+                isPublished: true,
+            },
+        },
+        {
+            $sort: {
+                createdAt: -1,
+            },
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "owner",
+                pipeline: [
+                    {
+                        $project: {
+                            username: 1,
+                            fullName: 1,
+                            avatar: 1,
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            $addFields: {
+                owner: {
+                    $first: "$owner",
+                },
+            },
+        },
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            videos,
+            "Feed videos fetched successfully"
+        )
+    );
+});
+
+const searchVideos = asynchandler(async (req, res) => {
+     console.log("SEARCH ROUTE HIT");
+
+    const { q } = req.query;
+
+    if (!q) {
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                [],
+                "No search query provided"
+            )
+        );
+    }
+
+    const videos = await Video.aggregate([
+        {
+            $match: {
+                isPublished: true,
+                $or: [
+                    {
+                        title: {
+                            $regex: q,
+                            $options: "i"
+                        }
+                    },
+                    {
+                        description: {
+                            $regex: q,
+                            $options: "i"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "owner",
+                pipeline: [
+                    {
+                        $project: {
+                            fullName: 1,
+                            username: 1,
+                            avatar: 1
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $addFields: {
+                owner: {
+                    $first: "$owner"
+                }
+            }
+        },
+        {
+            $sort: {
+                createdAt: -1
+            }
+        }
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            videos,
+            "Search results fetched successfully"
+        )
+    );
+
+});
+
 
 
 
 export {
-
     publishAVideo,
-
     getAllVideos,
-
     getVideoById,
-
     updateVideo,
-
     deleteVideo,
-
-    togglePublishStatus
-
+    togglePublishStatus,
+    getFeedVideos,
+    searchVideos,
 };

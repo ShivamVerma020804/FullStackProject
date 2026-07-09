@@ -28,11 +28,29 @@ Get All Videos
 */
 
 export const getAllVideos = async () => {
-  const response = await api.get("/videos");
 
-  return response.data;
+    const token = localStorage.getItem("accessToken");
+
+    const response = await api.get("/videos", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    return response.data;
 };
+/*
+=====================================
+Get Feed Videos
+=====================================
+*/
 
+export const getFeedVideos = async () => {
+
+    const response = await api.get("/videos/feed");
+
+    return response.data;
+};
 /*
 =====================================
 Get Single Video

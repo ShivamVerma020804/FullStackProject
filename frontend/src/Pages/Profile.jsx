@@ -7,6 +7,9 @@ import {
   updateAvatar,
   updateCoverImage,
 } from "../services/userService";
+import { useEffect } from "react";
+import { getAllVideos } from "../services/videoService";
+import VideoCard from "../components/VideoCard";
 
 function Profile() {
   const { user, setUser } = useAuth();
@@ -16,6 +19,8 @@ function Profile() {
 
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
+  const [videos, setVideos] = useState([]);
+const [totalViews, setTotalViews] = useState(0);
 
   const avatarRef = useRef(null);
   const coverRef = useRef(null);
@@ -61,6 +66,29 @@ function Profile() {
       setUploadingCover(false);
     }
   };
+
+  const fetchVideos = async () => {
+  try {
+    const response = await getAllVideos();
+
+    const uploadedVideos = response.data.docs || [];
+
+    setVideos(uploadedVideos);
+
+    const views = uploadedVideos.reduce(
+      (sum, video) => sum + video.views,
+      0
+    );
+
+    setTotalViews(views);
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+useEffect(() => {
+  fetchVideos();
+}, []);
 
   return (
     <MainLayout>
@@ -135,7 +163,7 @@ function Profile() {
 
           {/* User Info */}
 
-          <div className="mt-6">
+          <div className="mt-8">
 
             <h1 className="text-4xl font-bold">
               {user?.fullName}
@@ -145,32 +173,46 @@ function Profile() {
               @{user?.username}
             </p>
 
-            <p className="text-gray-500">
-              {user?.email}
-            </p>
+          <p className="text-gray-500">
+  {user?.email}
+</p>
+
+<p className="text-gray-400 mt-1">
+  Welcome to your NovaTube Channel 🎥
+</p>
 
           </div>
 
           {/* Stats */}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
 
-            <div className="bg-gray-100 rounded-xl p-5 text-center">
-              <h2 className="text-3xl font-bold">0</h2>
-              <p className="text-gray-500">Videos</p>
+            <div className="bg-white border rounded-xl shadow-sm p-6 text-center hover:shadow-md transition">
+              <h2 className="text-3xl font-bold">
+  {videos.length}
+</h2>
+
+<p className="text-gray-500">
+  Videos
+</p>
             </div>
 
-            <div className="bg-gray-100 rounded-xl p-5 text-center">
+            <div className="bg-white border rounded-xl shadow-sm p-6 text-center hover:shadow-md transition">
               <h2 className="text-3xl font-bold">0</h2>
               <p className="text-gray-500">Subscribers</p>
             </div>
 
-            <div className="bg-gray-100 rounded-xl p-5 text-center">
-              <h2 className="text-3xl font-bold">0</h2>
-              <p className="text-gray-500">Views</p>
+            <div className="bg-white border rounded-xl shadow-sm p-6 text-center hover:shadow-md transition">
+              <h2 className="text-3xl font-bold">
+  {totalViews}
+</h2>
+
+<p className="text-gray-500">
+  Views
+</p>
             </div>
 
-            <div className="bg-gray-100 rounded-xl p-5 text-center">
+            <div className="bg-white border rounded-xl shadow-sm p-6 text-center hover:shadow-md transition">
               <h2 className="text-3xl font-bold">0</h2>
               <p className="text-gray-500">Playlists</p>
             </div>
@@ -200,6 +242,44 @@ function Profile() {
         </div>
 
       </div>
+
+      {/* My Videos */}
+
+<div className="mt-14">
+
+  <h2 className="text-3xl font-bold mb-8">
+    My Videos
+  </h2>
+
+  {videos.length === 0 ? (
+
+    <div className="bg-gray-100 rounded-xl p-10 text-center">
+
+      <p className="text-gray-500 text-lg">
+        You haven't uploaded any videos yet 🚀
+      </p>
+
+    </div>
+
+  ) : (
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      {videos.map((video) => (
+
+       <VideoCard
+    key={video._id}
+    video={video}
+    compact
+/>
+
+      ))}
+
+    </div>
+
+  )}
+
+</div>
 
       {showModal && (
         <EditProfileModal

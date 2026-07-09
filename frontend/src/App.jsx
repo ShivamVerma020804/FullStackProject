@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import ProtectedRoute from "./components/ProtectedRoutes";
-import PublicRoute from "./components/PublicRoutes";
-
+import Home from "./Pages/Home";
+import Watch from "./Pages/Watch";
 import Dashboard from "./Pages/Dashboard";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
@@ -11,76 +10,103 @@ import Upload from "./Pages/Upload";
 import Playlists from "./Pages/Playlists";
 import NotFound from "./Pages/NotFound";
 
+import ProtectedRoute from "./components/ProtectedRoutes";
+import PublicRoute from "./components/PublicRoutes";
+
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
+    return (
+        <BrowserRouter>
+            <Routes>
 
-        {/* Protected Routes */}
+                {/* ================= Protected Routes ================= */}
 
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+                {/* Home Feed */}
+                <Route
+                    path="/"
+                    element={
+                        <ProtectedRoute>
+                            <Home />
+                        </ProtectedRoute>
+                    }
+                />
 
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
+                {/* Dashboard */}
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
 
-        <Route
-          path="/upload"
-          element={
-            <ProtectedRoute>
-              <Upload />
-            </ProtectedRoute>
-          }
-        />
+                {/* Profile */}
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <Profile />
+                        </ProtectedRoute>
+                    }
+                />
 
-        <Route
-          path="/playlists"
-          element={
-            <ProtectedRoute>
-              <Playlists />
-            </ProtectedRoute>
-          }
-        />
+                {/* Upload */}
+                <Route
+                    path="/upload"
+                    element={
+                        <ProtectedRoute>
+                            <Upload />
+                        </ProtectedRoute>
+                    }
+                />
 
-        {/* Public Routes */}
+                {/* Playlists */}
+                <Route
+                    path="/playlists"
+                    element={
+                        <ProtectedRoute>
+                            <Playlists />
+                        </ProtectedRoute>
+                    }
+                />
 
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          }
-        />
+                {/* Watch Video (Coming Next) */}
+              <Route
+    path="/watch/:videoId"
+    element={
+        <ProtectedRoute>
+            <Watch />
+        </ProtectedRoute>
+    }
+/>
 
-        <Route
-          path="/signup"
-          element={
-            <PublicRoute>
-              <Signup />
-            </PublicRoute>
-          }
-        />
+                {/* ================= Public Routes ================= */}
 
-        {/* 404 Page */}
+                <Route
+                    path="/login"
+                    element={
+                        <PublicRoute>
+                            <Login />
+                        </PublicRoute>
+                    }
+                />
 
-        <Route path="*" element={<NotFound />} />
+                <Route
+                    path="/signup"
+                    element={
+                        <PublicRoute>
+                            <Signup />
+                        </PublicRoute>
+                    }
+                />
 
-      </Routes>
-    </BrowserRouter>
-  );
+                {/* ================= 404 ================= */}
+
+                <Route path="*" element={<NotFound />} />
+
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;

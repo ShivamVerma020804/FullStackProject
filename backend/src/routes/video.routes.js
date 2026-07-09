@@ -6,7 +6,9 @@ import {
     getVideoById,
     updateVideo,
     deleteVideo,
-    togglePublishStatus
+    togglePublishStatus,
+    getFeedVideos,
+    searchVideos,
 } from "../controllers/video.controller.js";
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -14,37 +16,59 @@ import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
+/* ===========================
+        Public Routes
+=========================== */
 
-// Public Routes
+// Search
+router.get("/search", (req, res, next) => {
+    console.log("✅ SEARCH ROUTE HIT");
+    console.log(req.originalUrl);
+    console.log(req.query);
 
-router
-    .route("/")
-    .get(verifyJWT, getAllVideos);
+    return searchVideos(req, res, next);
+});
 
-router
-    .route("/:videoId")
-    .get(getVideoById);
+// Home Feed
+router.get("/feed", getFeedVideos);
 
+// Single Video
+router.get("/:videoId", (req, res, next) => {
+    console.log("❌ VIDEO ROUTE HIT");
+    console.log(req.params.videoId);
 
-// Protected Routes
+    return getVideoById(req, res, next);
+});
 
-router
-    .route("/upload")
-    .post(
-        verifyJWT,
-        upload.fields([
-            {
-                name: "videoFile",
-                maxCount: 1
-            },
-            {
-                name: "thumbnail",
-                maxCount: 1
-            }
-        ]),
-        publishAVideo
-    );
+/* ===========================
+      Protected Routes
+=========================== */
 
+// Dashboard
+router.get(
+    "/",
+    verifyJWT,
+    getAllVideos
+);
+
+// Upload
+router.post(
+    "/upload",
+    verifyJWT,
+    upload.fields([
+        {
+            name: "videoFile",
+            maxCount: 1,
+        },
+        {
+            name: "thumbnail",
+            maxCount: 1,
+        },
+    ]),
+    publishAVideo
+);
+
+// Update & Delete
 router
     .route("/:videoId")
     .patch(
@@ -57,11 +81,11 @@ router
         deleteVideo
     );
 
-router
-    .route("/toggle/publish/:videoId")
-    .patch(
-        verifyJWT,
-        togglePublishStatus
-    );
+// Toggle Publish
+router.patch(
+    "/toggle/publish/:videoId",
+    verifyJWT,
+    togglePublishStatus
+);
 
 export default router;

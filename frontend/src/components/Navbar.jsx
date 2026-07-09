@@ -1,28 +1,35 @@
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
   const { user } = useAuth();
 
   return (
-    <header className="h-16 bg-white border-b flex items-center justify-between px-8 shadow-sm">
-      <div className="flex items-center gap-2">
+    <header className="sticky top-0 z-50 h-16 bg-white border-b shadow-sm px-8 flex items-center justify-between">
+
+      {/* Logo */}
+
+      <Link
+        to="/"
+        className="flex items-center gap-2"
+      >
         <span className="text-3xl">🎥</span>
+
         <h1 className="text-2xl font-bold text-red-600">
           NovaTube
         </h1>
-      </div>
+      </Link>
 
-      <input
-        type="text"
-        placeholder="Search videos..."
-        className="w-96 border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-red-500"
-      />
+      {/* User Profile */}
 
-      <div className="flex items-center gap-3">
+      <Link
+        to="/profile"
+        className="flex items-center gap-3 hover:bg-gray-100 px-3 py-2 rounded-xl transition duration-200"
+      >
         <img
           src={user?.avatar}
-          alt="avatar"
-          className="w-10 h-10 rounded-full object-cover border"
+          alt={user?.username}
+          className="w-11 h-11 rounded-full object-cover border border-gray-300"
         />
 
         <div>
@@ -31,10 +38,11 @@ function Navbar() {
           </h3>
 
           <p className="text-sm text-gray-500">
-            {user?.email}
+            View Profile
           </p>
         </div>
-      </div>
+      </Link>
+
     </header>
   );
 }
