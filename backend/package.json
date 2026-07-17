@@ -11,9 +11,10 @@
   "license": "ISC",
   "author": "Shivam Verma",
   "main": "index.js",
-  "scripts": {
-  "dev": "nodemon --experimental-json-modules src/index.js"
-  },
+"scripts": {
+  "dev": "nodemon --experimental-json-modules src/index.js",
+  "start": "node --experimental-json-modules src/index.js"
+},
   "devDependencies": {
     "nodemon": "^3.1.14"
   },
